@@ -47,5 +47,5 @@ https://github.com/AzizAlqasem/CurveFit/releases/download/v1.0.0/CurveFit.v1.0.0
 Abdulaziz Alqasem
 Aziz_Alqasem@hotmail.com
 
-# credit:
+# Credit:
 Thanks to all developers at: Python, Numpy, SciPy, Matplotlib, SymPy, Pandas, re, and Openpyxl
