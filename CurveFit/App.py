@@ -45,6 +45,11 @@ class App(Curve_fit, GUI):
         self.start_app()
         
     def start_app(self,):
+        self.clear_app()
+        self.initate_fittings()
+        self.app_started = True
+        
+    def clear_app(self):
         self.axes.cla()
         self.mini_axes.cla()
         self.b_ok['text'] = 'Ok'
@@ -56,33 +61,32 @@ class App(Curve_fit, GUI):
                 lc.grid_forget()
                 lg.grid_forget()
                 e.grid_forget()
-                
-        self.initate_fittings()
-        self.canvas.draw()
-        self.mini_canvas.draw()
-        self.app_started = True
-        
+
     def initate_fittings(self):
         self.fittings = [Curve_fit(path = p, id=ID+1) for ID, p in enumerate(self.filenames)]
         for fit in self.fittings:
             fit.show(self.axes)
         self.fittings_size = len(self.fittings)
         self.fitting_index = -1 # so it starts from zero, 1 + (-1) = 0
-        
-        
-    def press_ok(self):
-        self.b_ok['text'] = 'Restart'
-        self.b_ok['fg'] = 'red'
-        self.b_ok['command'] = self.start_app        
+        self.canvas.draw()
+        self.mini_canvas.draw()
 
+        
+    def press_ok(self): 
+        self.switch_to_restart()
         self.first_fit_guess()
         
         self.select_fitting(d=1)        
         self.plot()
-                
+            
+    def switch_to_restart(self):
+        self.b_ok['text'] = 'Restart'
+        self.b_ok['fg'] = 'red'
+        self.b_ok['command'] = self.start_app        
+        
     
     def first_fit_guess(self,):
-        self.formula = self.formula_text.get()
+        self.formula = self.formula_text.get().replace('X','x').replace('^', '**')
         self.parameters = [str(s) for s in sp.simplify(self.formula).free_symbols if str(s)!='x']
         self.parameters_guess = {par : 1 for par in self.parameters}
         
@@ -109,7 +113,7 @@ class App(Curve_fit, GUI):
             
     def select_fitting(self, d): # To select fitting from fitting
         self.fittings_size = len(self.fittings)
-        
+
         if (d == 1 and self.fitting_index == self.fittings_size - 1): # Last fitting
             self.fitting_index = 0 # start again
         elif d == -1 and self.fitting_index == 0: # going back from first fitting
@@ -119,8 +123,7 @@ class App(Curve_fit, GUI):
         self.fitting = self.fittings[self.fitting_index]
         
         self.update_status()
-        
-        
+            
 
     def press_fit(self, d=0):
         self.get_data_from_tabel()
@@ -191,10 +194,22 @@ class App(Curve_fit, GUI):
         self.mini_canvas.draw()
     
     def press_del(self):
-        self.fittings.remove(self.fitting)
-        self.select_fitting(d=-1)
-        self.plot()
-        self.mini_plot()
+        try:
+            self.fittings.remove(self.fitting)
+            self.fittings_size = len(self.fittings)
+        except:
+            self.update_status(msg='All Files were deleted! Load them Again')
+        
+        if self.fittings_size == 0:
+            self.clear_app()
+            self.update_status(msg='All Files were deleted!')
+            self.canvas.draw()
+            self.switch_to_restart()
+            del self.fitting
+        else:
+            self.select_fitting(d=-1)
+            self.plot()
+            self.mini_plot()
         
     def press_save(self):
         self.save_path = filedialog.askdirectory(title='Select Folder to save your Results at')
@@ -211,7 +226,13 @@ class App(Curve_fit, GUI):
         self.generate_tabel_fit()
         self.export_tabel_to_excel()
     
-     
+    def save_fit_data(self):
+        for fit in self.fittings:
+            fit.fitted_data(save=True, path=os.path.join(self.save_path, fit.name+'.txt')) 
+    
+    def save_figs(self):
+        pass
+    
     def generate_tabel_fit(self):
         self.tabel_fit = {par:[] for par in self.parameters}
         self.tabel_fit['File'] = []
@@ -226,24 +247,24 @@ class App(Curve_fit, GUI):
         df = df[['File', *self.parameters]]
         
         df.to_excel(os.path.join(self.save_path, 'Results.xlsx'))
-        
-    def save_fit_data(self):
-        for fit in self.fittings:
-            fit.fitted_data(save=True, path=os.path.join(self.save_path, fit.name+'.txt'))
+    
     
     
     def update_status(self, msg=''):
         if msg:
             self.msg = msg
         else:
-            self.msg =f"""
-            File index number: {self.fitting_index}
-            Error: {self.error_msg}
-            """ 
+            self.msg =f"File index number: {self.fitting_index + 1}\nError: {self.error_msg}" 
         
         self.l_status['text'] = self.msg
-        self.l_status.grid(column=0, row=0, sticky='NW')
+        #self.l_status.grid(column=0, row=0, sticky='NW')
         
+        if self.fittings_size:
+            self.calculate_progress()
+        else:
+            self.progress_bar['value'] = 0
+        
+    def calculate_progress(self):
         progress = 0
         for fit in self.fittings:
             if fit.fitted:
@@ -259,7 +280,7 @@ class App(Curve_fit, GUI):
     
     def insert_formula(self, fo):
         fo_dict = {
-            "poly": "A*x**3 + B*x**2 + C*x + d",
+            "poly": "A*x**3 + B*x**2 + c*x + d",
             "wave": "a*sin(W1*x) + b*cos(W2*x) + c",
             "exp": "a*exp(G*x) + bg",
             "gaussian": "a*exp(-( (x-b)/C )**2) + d",

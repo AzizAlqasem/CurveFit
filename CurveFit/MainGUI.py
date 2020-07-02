@@ -160,14 +160,14 @@ class GUI:
         self.b_back.grid(column=0, row=0, columnspan=1, sticky='NWES', padx=5)
         
         self.b_next = tk.Button(self.control_frame, text='>>', width=7, height=2, font=self.big_font)
-        self.b_next.grid(column=4, row=0, sticky='NWES', padx=5)
+        self.b_next.grid(column=3, row=0, sticky='NWES', padx=5)
         
         self.b_del = tk.Button(self.control_frame, text='Delete', fg='red', width=7, height=2, font=self.big_font)
-        self.b_del.grid(column=3, row=0, sticky='NWES', padx=5)
+        self.b_del.grid(column=4, row=0, sticky='NWES', padx=5)
         
-        for i in range(3) :
+        for i in range(5) :
             self.control_frame.columnconfigure(i, weight=1)
-            self.control_frame.rowconfigure(i, weight=1)
+        self.control_frame.rowconfigure(0, weight=1)
         
     def generate_figure(self):
         self.fig = Figure(dpi=120)
