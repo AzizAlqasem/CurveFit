@@ -26,7 +26,7 @@ https://youtu.be/3d7o3ZIqxKY
 ## Through The executable file
 **Note: The executable file runs at Windows 10, and may run at old windows versions!**
 1. Download the executable file package through:
-https://github.com/AzizAlqasem/CurveFit/releases/download/v1.0.0/CurveFit.v1.0.0.zip
+https://github.com/AzizAlqasem/CurveFit/releases
 2. Unzip the file
 3. Go to App.exe and run it
 
