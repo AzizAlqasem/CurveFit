@@ -33,6 +33,7 @@ https://github.com/AzizAlqasem/CurveFit/releases
 ## Through python:
 1. Download pyhton 3.6+
 2. install the following packages, from the command line:
+```
   pip install numpy
   pip install scipy
   pip install matplotlib
@@ -40,6 +41,7 @@ https://github.com/AzizAlqasem/CurveFit/releases
   pip install pandas
   pip install openpyxl
   pip install re
+```
  3. Download this repo 
  4. Run the python file named App.py
   
