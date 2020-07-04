@@ -8,8 +8,8 @@ import warnings
 from curvefit import Curve_fit
 from MainGUI import GUI
 
-__version__='1.0.0'
-
+__version__='1.0.1'  # Local verion (App.py)
+version = "1.0.2"    # Global Version (CurveFit project)
 
 
 class App(Curve_fit, GUI):
@@ -224,7 +224,7 @@ class App(Curve_fit, GUI):
             
     def save_table(self,):
         self.generate_tabel_fit()
-        self.export_tabel_to_excel()
+        self.export_tabel_to_csv()
     
     def save_fit_data(self):
         for fit in self.fittings:
@@ -242,13 +242,12 @@ class App(Curve_fit, GUI):
                 for i, par in enumerate(self.parameters):
                     self.tabel_fit[par].append(fit.pfit[i])
     
-    def export_tabel_to_excel(self):
+    def export_tabel_to_csv(self):
         df = pd.DataFrame(self.tabel_fit)
         df = df[['File', *self.parameters]]
         
-        df.to_excel(os.path.join(self.save_path, 'Results.xlsx'))
-    
-    
+        df.to_csv(os.path.join(self.save_path, 'Results.csv'))
+        
     
     def update_status(self, msg=''):
         if msg:

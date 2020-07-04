@@ -4,8 +4,9 @@ from tkinter import ttk
 from tkinter import filedialog
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
+import platform
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 class GUI:
     
@@ -17,7 +18,12 @@ class GUI:
             geometry=f"{int(w*0.85)}x{int(h*0.8)}"
         self.root.geometry(geometry)
         self.root.title('CurveFit')
-        self.root.iconbitmap(r"curvefit_logo_icon.ico")
+        if platform.system() == 'Windows':
+            self.root.iconbitmap("Icon.ico")
+        #elif platform.system() == "Darwin":
+        #    self.root.iconbitmap("Icon.icns")
+        #else:
+        #    pass
         
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
@@ -52,13 +58,13 @@ class GUI:
         self.control_frame = tk.LabelFrame(self.rfram, text="Control")
         self.figure_frame = tk.LabelFrame(self.rfram, text='Figure')
         
-    def grid(self):
+    def grid(self): #Col=8 , Row=7
         self.file_frame.grid(column=0, row=0, columnspan=2, rowspan=1, ipadx=20, ipady=10, padx=10, pady=5, sticky='NWES')
-        self.formula_frame.grid(column=3, row=0, columnspan=4, rowspan=1, ipadx=10, ipady=10, padx=20, pady=5,sticky='NWES')
+        self.formula_frame.grid(column=2, row=0, columnspan=6, rowspan=1, ipadx=10, ipady=10, padx=100, pady=5,sticky='NWES')
         self.tabel_frame.grid(column=0, row=1, columnspan=2, rowspan=3, ipadx=20, ipady=10, padx=10, pady=5, sticky='NWES')
         self.mini_figure_frame.grid(column=0, row=4, columnspan=2, rowspan=3, ipadx=5, ipady=5, padx=10, pady=5, sticky='NWES')
-        self.status_frame.grid(column=5, row=6, columnspan=3, rowspan=2, ipadx=2, ipady=2, padx=10, pady=5, sticky='NWES')
-        self.control_frame.grid(column=3, row=6, columnspan=2, rowspan=1, ipadx=20, ipady=15, padx=10, pady=5, sticky='NWES')
+        self.status_frame.grid(column=5, row=6, columnspan=3, rowspan=1, ipadx=2, ipady=2, padx=10, pady=5, sticky='NWES')
+        self.control_frame.grid(column=2, row=6, columnspan=3, rowspan=1, ipadx=20, ipady=25, padx=10, pady=5, sticky='NWES')
         self.figure_frame.grid(column=2, row=1, columnspan=6, rowspan=5, ipadx=20, ipady=15, padx=10, pady=5, sticky='NWES')
         self.figure_frame.columnconfigure(1, weight=1)
         
@@ -82,15 +88,15 @@ class GUI:
         
         
     def generate_formula(self):
-        self.formula_text = tk.Entry(self.formula_frame, width=50, bg='white', font=self.big_font)
-        self.formula_text.grid(column=0, row=0, columnspan=5, ipady=12)
+        self.formula_text = tk.Entry(self.formula_frame, width=70, bg='white', font=self.big_font)
+        self.formula_text.grid(column=0, row=0, columnspan=5, ipady=12,ipadx=50, padx=20)
         self.formula_text.insert(0, 'A*x + b')
         
-        self.b_fo_exp = tk.Button(self.formula_frame, text="Exp / Decay", width=10, height=1, font=self.norm_font,)
-        self.b_fo_gaussian = tk.Button(self.formula_frame, text="Gaussian", width=10, height=1, font=self.norm_font)
-        self.b_fo_wave = tk.Button(self.formula_frame, text="Wave", width=9, height=1, font=self.norm_font)
-        self.b_fo_poly = tk.Button(self.formula_frame, text="Polynomials", width=10, height=1, font=self.norm_font)
-        self.b_fo_custom = tk.Button(self.formula_frame, text="Custom", width=10, height=1, font=self.norm_font)
+        self.b_fo_exp = tk.Button(self.formula_frame, text="Exp / Decay", width=10, height=2, font=self.norm_font,)
+        self.b_fo_gaussian = tk.Button(self.formula_frame, text="Gaussian", width=10, height=2, font=self.norm_font)
+        self.b_fo_wave = tk.Button(self.formula_frame, text="Wave", width=9, height=2, font=self.norm_font)
+        self.b_fo_poly = tk.Button(self.formula_frame, text="Polynomials", width=10, height=2, font=self.norm_font)
+        self.b_fo_custom = tk.Button(self.formula_frame, text="Custom", width=10, height=2, font=self.norm_font)
         
         self.b_fo_exp.grid(column=0, row=1, padx=4, pady=10)
         self.b_fo_gaussian.grid(column=1, row=1, padx=4, pady=10)
@@ -100,7 +106,8 @@ class GUI:
         
         for i in range(5) :
             self.formula_frame.columnconfigure(i, weight=1)
-            self.formula_frame.rowconfigure(i, weight=1)
+        self.formula_frame.rowconfigure(0, weight=1)
+        self.formula_frame.rowconfigure(1, weight=1)
  
     
     def generate_limit(self): # Under tabel_frame
@@ -111,7 +118,9 @@ class GUI:
         self.e_from.grid(column=1,row=0, padx=5, pady=2)
         self.e_to.grid(column=2,row=0, padx=5, pady=2)
         
-        
+        for i in range(3) :
+            self.tabel_frame.columnconfigure(i, weight=1)
+
         
     def generate_tabel(self, const_list=[]):
         tk.Label(self.tabel_frame, text = 'Const', font=self.big_font).grid(column=0, row=1, pady=2)
@@ -143,27 +152,27 @@ class GUI:
         
     def generate_status(self):
         self.l_status = tk.Label(self.status_frame, text='Messege', wraplength=300)
-        self.l_status.grid(column=0, row=0, sticky='NW')
+        self.l_status.grid(column=0, row=0, sticky='NW', padx=10)
         
         self.progress_bar = ttk.Progressbar(self.status_frame, length=250)
-        self.progress_bar.grid(column=0, row=1, sticky='NWES')
+        self.progress_bar.grid(column=0, row=1, sticky='NWES', padx=10, pady=5)
         
-        for i in range(1) :
-            self.status_frame.columnconfigure(i, weight=1)
+        for i in range(2) :
             self.status_frame.rowconfigure(i, weight=1)
+        self.status_frame.columnconfigure(0, weight=1)
         
     def generate_control(self):
         self.b_fit = tk.Button(self.control_frame, text='Fit', width=12, height=2, font=self.big_font)
-        self.b_fit.grid(column=1, row=0, columnspan=2, sticky='NWES', padx=5)
+        self.b_fit.grid(column=1, row=0, columnspan=2, sticky='NWES', padx=5, pady=5)
         
         self.b_back = tk.Button(self.control_frame, text='<<', width=7, height=2, font=self.big_font)
-        self.b_back.grid(column=0, row=0, columnspan=1, sticky='NWES', padx=5)
+        self.b_back.grid(column=0, row=0, columnspan=1, sticky='NWES', padx=5, pady=5)
         
         self.b_next = tk.Button(self.control_frame, text='>>', width=7, height=2, font=self.big_font)
-        self.b_next.grid(column=3, row=0, sticky='NWES', padx=5)
+        self.b_next.grid(column=3, row=0, sticky='NWES', padx=5, pady=5)
         
         self.b_del = tk.Button(self.control_frame, text='Delete', fg='red', width=7, height=2, font=self.big_font)
-        self.b_del.grid(column=4, row=0, sticky='NWES', padx=5)
+        self.b_del.grid(column=4, row=0, sticky='NWES', padx=5, pady=5)
         
         for i in range(5) :
             self.control_frame.columnconfigure(i, weight=1)
