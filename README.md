@@ -51,4 +51,4 @@ https://github.com/AzizAlqasem/CurveFit/releases
     Aziz_Alqasem@hotmail.com
 
 # Credit:
-Thanks to all developers at: Python, Numpy, SciPy, Matplotlib, SymPy, Pandas, re, and Openpyxl
+Thanks to all developers at: Python, Numpy, SciPy, Matplotlib, SymPy and Pandas
