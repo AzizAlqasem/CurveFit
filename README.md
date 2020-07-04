@@ -39,7 +39,7 @@ https://github.com/AzizAlqasem/CurveFit/releases
   pip install sympy
   pip install pandas
 ```
- 3. Download this repo 
+ 3. Download the source code at: https://github.com/AzizAlqasem/CurveFit/releases
  4. Run the python file named App.py
   
 # Author:
