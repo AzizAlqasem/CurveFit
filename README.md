@@ -2,8 +2,8 @@
 CurveFit is a Data Analysis software that makes quick and easy fitting using python, the programming langauge. It allows the user to choose a fitting formula, and then get the fitted unknown constants. The Fitting results can be exported and saved in an excel file.
  
  <p align="center">
-  <img src="doc/SnapShot1.PNG" width="450" hspace="0" title="hover text">
-  <img src="doc/Snapshot2.PNG" width="450" alt="accessibility text">
+  <img src="doc/SnapShot1.PNG" width="400" hspace="0" title="hover text">
+  <img src="doc/Snapshot2.PNG" width="400" alt="accessibility text">
 </p>
 
 # Quick Tutorial
